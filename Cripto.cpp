@@ -26,7 +26,7 @@ void encryptFile(const fs::path& path, const string& password)
     {
         cerr << "Erro ao criar o arquivo " << output_filename << endl;
         fin.close();
-        return;pr
+        return;
     }
 
     char c;
