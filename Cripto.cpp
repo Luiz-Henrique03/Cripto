@@ -6,7 +6,7 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-const string password = "senha123"; // Senha padr„o para criptografia e descriptografia
+const string password = "senha123"; // Senha padr√£o para criptografia e descriptografia
 
 void encryptFile(const fs::path& path, const string& password)
 {
@@ -47,7 +47,7 @@ void decryptFile(const fs::path& path, const string& password)
     string filename = path.filename().string();
     if (!fs::path(filename).has_extension() || fs::path(filename).extension() != ".encrypted")
     {
-        cerr << "O arquivo " << filename << " n„o È um arquivo criptografado." << endl;
+        cerr << "O arquivo " << filename << " n√£o √© um arquivo criptografado." << endl;
         return;
     }
 
@@ -104,8 +104,7 @@ int main()
             }
         }
     }
-
-    else if (option == 2)
+   else if (option == 2)
     {
         string password;
         cout << "Digite a senha de descriptografia: ";
@@ -113,41 +112,19 @@ int main()
 
         for (const auto& entry : fs::directory_iterator("."))
         {
-            if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".encrypted")
+            if (fs::is_regular_file(entry.path()))
             {
-                string filename = entry.path().filename().string();
-                cout << "Descriptografando arquivo " << filename << "..." << endl;
-
-                ifstream fin(entry.path(), ios::binary);
-                if (!fin)
+                if (entry.path().filename().string() == "teste.exe" || entry.path().filename().string() == "Cripto.cpp")
                 {
-                    cerr << "Erro ao abrir o arquivo " << filename << endl;
                     continue;
                 }
 
-                string output_filename = filename.substr(0, filename.length() - 10); // remove a extens„o ".encrypted" do nome do arquivo
-                ofstream fout(output_filename, ios::binary);
-                if (!fout)
-                {
-                    cerr << "Erro ao criar o arquivo " << output_filename << endl;
-                    fin.close();
-                    continue;
-                }
-
-                char c;
-                while (fin >> noskipws >> c)
-                {
-                    int temp = c ^ password[0];
-                    fout << (char)temp;
-                }
-
-                fin.close();
-                fout.close();
-
-                fs::remove(entry.path());
+                decryptFile(entry.path(), password);
             }
         }
-
-        cout << "Descriptografia concluida!" << endl;
     }
+        cout << "Descriptografia concluida!" << endl;
+
+        return 0;
 }
+  
